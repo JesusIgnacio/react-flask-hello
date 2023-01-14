@@ -1,26 +1,34 @@
-import React, { useContext } from "react";
-import { Context } from "../store/appContext";
-import rigoImageUrl from "../../img/rigo-baby.jpg";
+import React, { useContext, useState } from "react";
 import "../../styles/home.css";
+import { sendEmail } from "../service/emailService";
 
 export const Home = () => {
-	const { store, actions } = useContext(Context);
+  const [email, setEmail] = useState("");
+  const [user, setUser] = useState({
+    email: "mail@mail.com",
+    name: "Jhon Doe",
+  });
+  const [link, setLink] = useState("www.google.com");
 
-	return (
-		<div className="text-center mt-5">
-			<h1>Hello Rigo!!</h1>
-			<p>
-				<img src={rigoImageUrl} />
-			</p>
-			<div className="alert alert-info">
-				{store.message || "Loading message from the backend (make sure your python backend is running)..."}
-			</div>
-			<p>
-				This boilerplate comes with lots of documentation:{" "}
-				<a href="https://start.4geeksacademy.com/starters/react-flask">
-					Read documentation
-				</a>
-			</p>
-		</div>
-	);
+  const verify = (_) => {
+    if (email.localeCompare(user.email) != 0) throw Error("Invalid Email");
+    let params = {
+      to_email: user.email,
+      to_name: user.name,
+      to_link: link,
+    };
+    sendEmail(params);
+  };
+
+  return (
+    <div className="text-center mt-5">
+      <input
+        title="email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button onClick={verify}>Verify email</button>
+    </div>
+  );
 };
