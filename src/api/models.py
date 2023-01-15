@@ -7,3 +7,10 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(260), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+
+    def serialize(self):
+
+        return {
+            "id": self.id,
+            "email": self.email
+        }
