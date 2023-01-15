@@ -87,3 +87,11 @@ def login():
         403,
         {'WWW-Authenticate' : 'Basic realm ="Wrong User or Password !!"'}
     )
+
+@api.route("/users")
+@jwt_required()
+def allUsers():
+    users = User.query.all()
+    users = list(map(lambda x: x.serialize(), users))
+
+    return make_response(jsonify(users), 200)
